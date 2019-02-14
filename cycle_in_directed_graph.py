@@ -24,6 +24,7 @@ so your function must return true.
 >>> f_node_1 = Node(1)
 >>> f_node_2 = Node(2)
 >>> f_node_3 = Node(3)
+>>> f_node_4 = Node(4)
 
 
 # Making the graph and adding nodes:
@@ -39,6 +40,8 @@ so your function must return true.
 >>> f.add_node(f_node_1)
 >>> f.add_node(f_node_2)
 >>> f.add_node(f_node_3)
+>>> f.add_node(f_node_4)
+
 
 
 
@@ -54,6 +57,8 @@ so your function must return true.
 >>> f.set_adjacent(f_node_0, f_node_1)
 >>> f.set_adjacent(f_node_2, f_node_0)
 >>> f.set_adjacent(f_node_2, f_node_3)
+>>> f.set_adjacent(f_node_4, f_node_3)
+
 
 
 # Tests:
@@ -98,29 +103,23 @@ class Graph:
         self.nodes.add(node)
 
     def set_adjacent(self, node1, node2):
-        """Set two nodes adjacent to each other."""
+        """Set edge from node1 to node2."""
 
         node1.adjacent.add(node2)
 
+
 def is_cyclic(graph):
     """ Returns true if directed graph contains a cycle."""
-    
+
     all_nodes = graph.nodes
-    
-    for node in list(graph.nodes):
-        visited = set()
-        to_visit = [node]
-
-        while to_visit:
-            current = to_visit[0]
-            to_visit.pop(0)
-            if current not in visited:
-                visited.add(current)
-                to_visit.extend(current.adjacent)
-            else:
-                return True
-    return False
-
+    graph_nodes = set(all_nodes)
+    adjacents = set()
+    for node in all_nodes:
+        for adjacent in node.adjacent:
+            adjacents.add(adjacent)
+    if len(graph_nodes - adjacents) > 0:
+        return False
+    return True
 
 
 if __name__ == '__main__':
